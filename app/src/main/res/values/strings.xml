@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Zemoga</string>
+    <string name="lbl_transactions">Transaciones</string>
+    <string name="lbl_api_default_error">Algo Salió Mal!</string>
+    <string name="lbl_error">Error!</string>
+    <string name="lbl_close">Cerrar</string>
 </resources>
