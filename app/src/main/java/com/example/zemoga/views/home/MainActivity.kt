@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zemoga.R
 import com.example.zemoga.databinding.ActivityMainBinding
-import com.leal.data.models.TransactionModel
-import com.example.zemoga.utils.RUtil.Companion.rString
+import com.example.zemoga.data.models.PostModel
 import com.example.zemoga.views.adapters.TransactionRecyclerAdapter
 import com.example.zemoga.views.base.BaseActivity
 
@@ -69,7 +68,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun setupDataView(ranking: MutableList<TransactionModel>) {
+    private fun setupDataView(ranking: MutableList<PostModel>) {
         binding.contentMainId.recyclerItems.layoutManager = LinearLayoutManager(this)
         transactionRecyclerAdapter = TransactionRecyclerAdapter(ranking, this)
         binding.contentMainId.recyclerItems.adapter = transactionRecyclerAdapter

@@ -2,11 +2,11 @@ package com.example.zemoga.views.home
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
-import com.example.zemoga.data.interactors.TransactionInteractor
+import com.example.zemoga.data.interactors.PostsInteractor
 import com.example.zemoga.data.models.ApiErrorModel
-import com.leal.data.models.TransactionModel
-import com.example.zemoga.di.transaction.DaggerITransactionComponent
-import com.example.zemoga.di.transaction.TransactionModule
+import com.example.zemoga.data.models.PostModel
+import com.example.zemoga.di.posts.DaggerIPostsComponent
+import com.example.zemoga.di.posts.PostsModule
 import com.example.zemoga.livedata.SingleLiveEvent
 import com.example.zemoga.utils.network.ApiError
 import javax.inject.Inject
@@ -15,24 +15,24 @@ import javax.inject.Inject
 class HomeViewModel : ViewModel() {
 
     @Inject
-    lateinit var transactionInteractor: TransactionInteractor
+    lateinit var postsInteractor: PostsInteractor
 
     init {
-        DaggerITransactionComponent.builder().transactionModule(TransactionModule()).build()
+        DaggerIPostsComponent.builder().postsModule(PostsModule()).build()
             .inject(this)
     }
 
     var singleLiveEvent: SingleLiveEvent<ViewEvent> = SingleLiveEvent()
 
     sealed class ViewEvent {
-        class ResponseTransactions(val transaction: List<TransactionModel>) : ViewEvent()
+        class ResponseTransactions(val transaction: List<PostModel>) : ViewEvent()
         class ResponseDeleteTransaction(val result: Boolean) : ViewEvent()
         class ResponseDeleteAllTransactions(val result: Boolean) : ViewEvent()
         class ResponseError(val apiError: ApiErrorModel) : ViewEvent()
     }
 
     fun getTransactions() {
-        transactionInteractor.getTransaction()?.subscribe({
+        postsInteractor.getPosts()?.subscribe({
             singleLiveEvent.value = ViewEvent.ResponseTransactions(it)
         }, {
             singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)
@@ -40,7 +40,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun deleteTransaction(id: Int) {
-        transactionInteractor.deleteTransaction(id)?.subscribe({
+        postsInteractor.deleteTransaction(id)?.subscribe({
             singleLiveEvent.value = ViewEvent.ResponseDeleteTransaction(it)
         }, {
             singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)
@@ -48,7 +48,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun deleteAllTransaction() {
-        transactionInteractor.deleteAllTransaction()?.subscribe({
+        postsInteractor.deleteAllTransaction()?.subscribe({
             singleLiveEvent.value = ViewEvent.ResponseDeleteAllTransactions(it)
         }, {
             singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)

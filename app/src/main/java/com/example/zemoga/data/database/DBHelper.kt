@@ -13,7 +13,7 @@ class DBHelper {
         DaggerIHelperComponent.builder().helperModule(HelperModule()).build().inject(this)
     }
 
-    fun saveTransaction(entity: TransactionEntity): Observable<Boolean> {
+    fun saveTransaction(entity: TransactionEntity): Observable<Boolean>? {
         val realmInstance: Realm = Realm.getDefaultInstance()
         return try {
             realmInstance.executeTransaction { realm ->
@@ -27,7 +27,7 @@ class DBHelper {
         }
     }
 
-    fun getTransactions(): Observable<List<TransactionEntity>> {
+    fun getTransactions(): Observable<List<TransactionEntity>>? {
         return Observable.just(geTransactionsEntity())
     }
 

@@ -15,7 +15,7 @@ class ApiFactory {
 
     companion object {
         private const val defaultTimeOut: Long = 10
-        private var BASE_URL = "https://mobiletest.leal.co/"
+        private var BASE_URL = "https://jsonplaceholder.typicode.com/"
         private var retrofit: Retrofit.Builder? = null
 
         @Synchronized

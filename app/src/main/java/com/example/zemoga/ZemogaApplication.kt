@@ -5,7 +5,7 @@ import com.example.zemoga.utils.RUtil.Companion.rString
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
-class LealApplication : MultiDexApplication() {
+class ZemogaApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
@@ -14,9 +14,9 @@ class LealApplication : MultiDexApplication() {
     }
 
     companion object {
-        private lateinit var instance: LealApplication
+        private lateinit var instance: ZemogaApplication
 
-        fun getInstance(): LealApplication {
+        fun getInstance(): ZemogaApplication {
             return instance
         }
     }

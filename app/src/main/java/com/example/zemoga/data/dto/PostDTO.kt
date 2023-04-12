@@ -2,10 +2,13 @@ package com.example.zemoga.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-class BranchDTO {
+class PostDTO {
     @SerializedName("id")
     var id: Int? = 0
 
-    @SerializedName("name")
-    var name: String? = null
+    @SerializedName("title")
+    var title: String? = null
+
+    @SerializedName("body")
+    var body: String? = null
 }
