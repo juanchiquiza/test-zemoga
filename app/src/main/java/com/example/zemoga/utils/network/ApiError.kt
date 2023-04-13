@@ -6,6 +6,7 @@ import com.google.gson.JsonSyntaxException
 import com.example.zemoga.data.models.ApiErrorModel
 import com.example.zemoga.utils.RUtil.Companion.rString
 import retrofit2.HttpException
+import java.util.*
 
 class ApiError constructor(error: Throwable) {
 
@@ -19,7 +20,11 @@ class ApiError constructor(error: Throwable) {
                 val errorJsonString = error.response()?.errorBody()?.string()
                 apiErrorModel = ApiErrorModel().apply {
                     code = error.code()
-                    mesage = getMessageError(errorJsonString).capitalize()
+                    mesage = getMessageError(errorJsonString).replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    }
                 }
             }
             else ->
@@ -39,7 +44,7 @@ class ApiError constructor(error: Throwable) {
                     .parse(errorJsonString)
                     .asJsonObject["message"]
                     .asString
-            } catch (e: JsonSyntaxException) {
+            } catch (e: Exception) {
                 e.message.toString()
             }
         }

@@ -51,7 +51,9 @@ abstract class BaseActivity: AppCompatActivity() {
         val titleDialog = view.findViewById<TextView>(R.id.lblMessageOnError)
         titleDialog.text = message
         val imgClose = view.findViewById<ImageView>(R.id.imgClose)
+        val btnClose = view.findViewById<ImageView>(R.id.btnClose)
         imgClose.setOnClickListener { alertDialog.dismiss() }
+        btnClose.setOnClickListener { alertDialog.dismiss() }
         alertDialog.show()
     }
 }

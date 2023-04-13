@@ -2,7 +2,7 @@ package com.example.zemoga.data.repositories.posts
 
 import com.example.zemoga.data.database.DBHelper
 import com.example.zemoga.data.dto.PostDTO
-import com.example.zemoga.data.entities.TransactionEntity
+import com.example.zemoga.data.entities.PostEntity
 import com.example.zemoga.di.posts.DaggerIPostsComponent
 import com.example.zemoga.network.ApiFactory
 import com.example.zemoga.di.posts.PostsModule
@@ -25,14 +25,16 @@ class PostsRepository : IPostsRepository {
     }
 
     override fun getPost(id: Int): Observable<PostDTO>? {
-        TODO("Not yet implemented")
+        return ApiFactory.build()?.getPost(id)?.flatMap { responseDto ->
+            Observable.just(responseDto)
+        }
     }
 
-    override fun saveTransaction(entity: TransactionEntity): Observable<Boolean>? {
+    override fun savePost(entity: PostEntity): Observable<Boolean>? {
         return databaseHelper.saveTransaction(entity)
     }
 
-    override fun getTransactionDB(): Observable<List<TransactionEntity>>? {
+    override fun getTransactionDB(): Observable<List<PostEntity>>? {
         return databaseHelper.getTransactions()
     }
 

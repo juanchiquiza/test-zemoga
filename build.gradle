@@ -20,6 +20,12 @@ buildscript {
         dagger_version = '2.19'
         rxjava_version = '2.2.4'
         rxjava_android_version = '2.1.0'
+        junit_version = '4.12'
+        mockito_kotlin_version = '4.0.0'
+        mockito_core_version_mb = '4.6.1'
+        mockk_version = '1.10.0'
+        mockito_inline_version = '2.13.0'
+        androidx_arch_core_version = '2.0.0'
     }
 
     repositories {

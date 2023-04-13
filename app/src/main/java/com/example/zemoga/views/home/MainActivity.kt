@@ -1,7 +1,9 @@
 package com.example.zemoga.views.home
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.lifecycle.ViewModelProviders
@@ -13,8 +15,9 @@ import com.example.zemoga.databinding.ActivityMainBinding
 import com.example.zemoga.data.models.PostModel
 import com.example.zemoga.views.adapters.TransactionRecyclerAdapter
 import com.example.zemoga.views.base.BaseActivity
+import kotlinx.android.synthetic.main.dialog_question.view.*
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), TransactionRecyclerAdapter.OnPostsListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var homeViewModel: HomeViewModel
@@ -36,7 +39,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupToolbar() {
-     //   setupToolbar(binding.contentToolbarId, rString(R.string.lbl_transactions))
+        //   setupToolbar(binding.contentToolbarId, rString(R.string.lbl_transactions))
         binding.contentToolbarId.imgClear.setOnClickListener {
             animate()
             homeViewModel.deleteAllTransaction()
@@ -47,16 +50,21 @@ class MainActivity : BaseActivity() {
     private fun setupViewModel() {
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         showLoading()
-        homeViewModel.getTransactions()
+        homeViewModel.getPosts()
     }
 
     private fun initSubscriptions() {
         homeViewModel.singleLiveEvent.observe(this) {
             when (it) {
-                is HomeViewModel.ViewEvent.ResponseTransactions -> {
+                is HomeViewModel.ViewEvent.ResponsePosts -> {
                     cancelRefresh()
                     hideLoading()
-                    setupDataView(it.transaction.toMutableList())
+                    setupDataView(it.posts.toMutableList())
+                }
+                is HomeViewModel.ViewEvent.ResponsePost -> {
+                    cancelRefresh()
+                    hideLoading()
+                    showDialogAction(it.post)
                 }
                 is HomeViewModel.ViewEvent.ResponseError -> {
                     cancelRefresh()
@@ -70,7 +78,7 @@ class MainActivity : BaseActivity() {
 
     private fun setupDataView(ranking: MutableList<PostModel>) {
         binding.contentMainId.recyclerItems.layoutManager = LinearLayoutManager(this)
-        transactionRecyclerAdapter = TransactionRecyclerAdapter(ranking, this)
+        transactionRecyclerAdapter = TransactionRecyclerAdapter(ranking, this, this)
         binding.contentMainId.recyclerItems.adapter = transactionRecyclerAdapter
 
         val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
@@ -106,7 +114,7 @@ class MainActivity : BaseActivity() {
             R.color.colorPrimaryLight
         )
         binding.swipeLayout.setOnRefreshListener {
-            homeViewModel.getTransactions()
+            homeViewModel.getPosts()
         }
     }
 
@@ -126,5 +134,24 @@ class MainActivity : BaseActivity() {
         if (binding.swipeLayout.isRefreshing) {
             binding.swipeLayout.isRefreshing = false
         }
+    }
+
+    private fun showDialogAction(post: PostModel?) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_question, null)
+        val builder = AlertDialog.Builder(this).setView(dialogView).setTitle("")
+        val alertDialog = builder.show()
+        dialogView.lblTitle.text = post?.title
+        dialogView.lblDescription.text = post?.body
+        dialogView.butCancel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        dialogView.imgClose.setOnClickListener {
+            alertDialog.dismiss()
+        }
+    }
+
+    override fun getPost(id: Int) {
+        showLoading()
+        homeViewModel.getPost(id)
     }
 }

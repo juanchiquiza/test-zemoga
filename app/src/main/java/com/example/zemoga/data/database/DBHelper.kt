@@ -1,6 +1,6 @@
 package com.example.zemoga.data.database
 
-import com.example.zemoga.data.entities.TransactionEntity
+import com.example.zemoga.data.entities.PostEntity
 import com.example.zemoga.di.helper.DaggerIHelperComponent
 import com.example.zemoga.di.helper.HelperModule
 import io.reactivex.Observable
@@ -13,7 +13,7 @@ class DBHelper {
         DaggerIHelperComponent.builder().helperModule(HelperModule()).build().inject(this)
     }
 
-    fun saveTransaction(entity: TransactionEntity): Observable<Boolean>? {
+    fun saveTransaction(entity: PostEntity): Observable<Boolean>? {
         val realmInstance: Realm = Realm.getDefaultInstance()
         return try {
             realmInstance.executeTransaction { realm ->
@@ -27,7 +27,7 @@ class DBHelper {
         }
     }
 
-    fun getTransactions(): Observable<List<TransactionEntity>>? {
+    fun getTransactions(): Observable<List<PostEntity>>? {
         return Observable.just(geTransactionsEntity())
     }
 
@@ -35,7 +35,7 @@ class DBHelper {
         val realmInstance: Realm = Realm.getDefaultInstance()
         return try {
             realmInstance.executeTransaction{
-                it.where(TransactionEntity::class.java).equalTo("id", id).findAll().deleteAllFromRealm()
+                it.where(PostEntity::class.java).equalTo("id", id).findAll().deleteAllFromRealm()
             }
             Observable.just(true)
         } catch (ex: RealmException) {
@@ -49,7 +49,7 @@ class DBHelper {
         val realmInstance: Realm = Realm.getDefaultInstance()
         return try {
             realmInstance.executeTransaction{
-                it.where(TransactionEntity::class.java).findAll().deleteAllFromRealm()
+                it.where(PostEntity::class.java).findAll().deleteAllFromRealm()
             }
             Observable.just(true)
         } catch (ex: RealmException) {
@@ -59,11 +59,11 @@ class DBHelper {
         }
     }
 
-    private fun geTransactionsEntity(): List<TransactionEntity>? {
+    private fun geTransactionsEntity(): List<PostEntity>? {
         val realm: Realm = Realm.getDefaultInstance()
-        val userEntity: List<TransactionEntity>
+        val userEntity: List<PostEntity>
         try {
-            userEntity = realm.where(TransactionEntity::class.java).findAll()
+            userEntity = realm.where(PostEntity::class.java).findAll()
         } catch (ex: RealmException) {
             return null
         }

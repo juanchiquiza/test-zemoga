@@ -3,7 +3,7 @@ package com.example.zemoga.data.interactors
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.example.zemoga.data.dto.PostDTO
-import com.example.zemoga.data.entities.TransactionEntity
+import com.example.zemoga.data.entities.PostEntity
 import com.example.zemoga.data.models.PostModel
 import com.example.zemoga.data.repositories.posts.IPostsRepository
 import com.example.zemoga.di.posts.DaggerIPostsComponent
@@ -33,10 +33,10 @@ class PostsInteractor {
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.flatMap { dtoList ->
-                    Observable.just(convertTransactionListEntityToModels(dtoList))
+                    Observable.just(convertPostsListEntityToModels(dtoList))
                 }
         } else {
-            postRepository.getPosts()
+            return postRepository.getPosts()
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.flatMap { dtoList ->
@@ -46,7 +46,6 @@ class PostsInteractor {
     }
 
     fun getPost(id: Int): Observable<PostModel>? {
-        connectionManger = ConnectionManager()
         return postRepository.getPost(id)
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
@@ -55,14 +54,28 @@ class PostsInteractor {
             }
     }
 
-    private fun convertTransactionListDtoToModels(dtoList: List<PostDTO>): List<PostModel> {
+    fun convertTransactionListDtoToModels(dtoList: List<PostDTO>): List<PostModel> {
         val models = mutableListOf<PostModel>()
         dtoList.forEach { dto ->
             val model = convertTransactionDtoToModel(dto)
-            //  saveTransactionEntity(convertTransactionDtoToEntity(dto))
+            savePostEntity(convertTransactionDtoToEntity(dto))
             models.add(model)
         }
         return models
+    }
+
+    private fun convertTransactionDtoToEntity(postDto: PostDTO): PostEntity {
+        val gson = Gson()
+        val jsonString = gson.toJson(postDto)
+        return PostEntity().apply {
+            id = postDto.id
+            transactionObj = jsonString
+        }
+    }
+
+    private fun savePostEntity(entity: PostEntity?): Observable<PostEntity> {
+        entity?.let { postRepository.savePost(it) }
+        return Observable.just(entity)
     }
 
     private fun convertTransactionDtoToModel(dto: PostDTO?): PostModel {
@@ -73,23 +86,23 @@ class PostsInteractor {
         }
     }
 
-    private fun convertTransactionListEntityToModels(dtoList: List<TransactionEntity>): List<PostModel> {
+    private fun convertPostsListEntityToModels(dtoList: List<PostEntity>): List<PostModel> {
         val models = mutableListOf<PostModel>()
         dtoList.forEach { dto ->
             val model =
-                convertTransactionDtoToModel(convertTransactionEntityToModel(dto.transactionObj))
+                convertTransactionDtoToModel(convertPostEntityToModel(dto.transactionObj))
             models.add(model)
         }
         return models
     }
 
-    private fun convertTransactionEntityToModel(json: String?): PostDTO {
+    private fun convertPostEntityToModel(json: String?): PostDTO {
         val gson = Gson()
         val transaction = object : TypeToken<PostDTO>() {}.type
         return gson.fromJson(json, transaction)
     }
 
-    fun deleteTransaction(id: Int): Observable<Boolean>? {
+    fun deletePost(id: Int): Observable<Boolean>? {
         return postRepository.deleteTransaction(id)
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
@@ -98,7 +111,7 @@ class PostsInteractor {
             }
     }
 
-    fun deleteAllTransaction(): Observable<Boolean>? {
+    fun deleteAllPosts(): Observable<Boolean>? {
         return postRepository.deleteAllTransaction()
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())

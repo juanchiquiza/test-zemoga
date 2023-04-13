@@ -11,13 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.zemoga.R
 import com.example.zemoga.data.models.PostModel
 import com.example.zemoga.views.home.HomeViewModel
-import kotlinx.android.synthetic.main.dialog_question.view.*
 import kotlinx.android.synthetic.main.item_transaction.view.*
 
 class TransactionRecyclerAdapter(
     private var items: MutableList<PostModel>,
-    private val context: Context
+    private val context: Context,
+    private val onPostsListener: OnPostsListener
 ) : RecyclerView.Adapter<ViewHolderItemTransactions>() {
+
+    interface OnPostsListener {
+        fun getPost(id: Int)
+    }
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -38,7 +42,7 @@ class TransactionRecyclerAdapter(
         holder.lblValuePoints.text = item.title
         holder.lblNameBranch.text = item.body
         holder.cardItem.setOnClickListener {
-            showDialogAction(context, item)
+            item.id?.let { it1 -> onPostsListener.getPost(it1) }
         }
     }
 
@@ -57,20 +61,6 @@ class TransactionRecyclerAdapter(
         if (items.size > 0) {
             items = mutableListOf()
             notifyDataSetChanged()
-        }
-    }
-
-    private fun showDialogAction(context: Context, transaction: PostModel?) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_question, null)
-        val builder = AlertDialog.Builder(context).setView(dialogView).setTitle("")
-        val alertDialog = builder.show()
-        dialogView.lblName.text = transaction?.title
-        dialogView.lblPoints.text = transaction?.body
-        dialogView.butCancel.setOnClickListener {
-            alertDialog.dismiss()
-        }
-        dialogView.imgClose.setOnClickListener {
-            alertDialog.dismiss()
         }
     }
 }

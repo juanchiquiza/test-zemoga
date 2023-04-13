@@ -25,22 +25,31 @@ class HomeViewModel : ViewModel() {
     var singleLiveEvent: SingleLiveEvent<ViewEvent> = SingleLiveEvent()
 
     sealed class ViewEvent {
-        class ResponseTransactions(val transaction: List<PostModel>) : ViewEvent()
+        class ResponsePosts(val posts: List<PostModel>) : ViewEvent()
+        class ResponsePost(val post: PostModel) : ViewEvent()
         class ResponseDeleteTransaction(val result: Boolean) : ViewEvent()
         class ResponseDeleteAllTransactions(val result: Boolean) : ViewEvent()
         class ResponseError(val apiError: ApiErrorModel) : ViewEvent()
     }
 
-    fun getTransactions() {
+    fun getPosts() {
         postsInteractor.getPosts()?.subscribe({
-            singleLiveEvent.value = ViewEvent.ResponseTransactions(it)
+            singleLiveEvent.value = ViewEvent.ResponsePosts(it)
+        }, {
+            singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)
+        })
+    }
+
+    fun getPost(id: Int) {
+        postsInteractor.getPost(id)?.subscribe({
+            singleLiveEvent.value = ViewEvent.ResponsePost(it)
         }, {
             singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)
         })
     }
 
     fun deleteTransaction(id: Int) {
-        postsInteractor.deleteTransaction(id)?.subscribe({
+        postsInteractor.deletePost(id)?.subscribe({
             singleLiveEvent.value = ViewEvent.ResponseDeleteTransaction(it)
         }, {
             singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)
@@ -48,7 +57,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun deleteAllTransaction() {
-        postsInteractor.deleteAllTransaction()?.subscribe({
+        postsInteractor.deleteAllPosts()?.subscribe({
             singleLiveEvent.value = ViewEvent.ResponseDeleteAllTransactions(it)
         }, {
             singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)
