@@ -64,7 +64,7 @@ class HomeViewModel : ViewModel() {
         })
     }
 
-    fun deleteAllTransaction() {
+    fun deleteAllPosts() {
         postsInteractor.deleteAllPosts()?.subscribe({
             singleLiveEvent.value = ViewEvent.ResponseDeleteAllTransactions(it)
         }, {

@@ -43,7 +43,7 @@ class MainActivity : BaseActivity(), TransactionRecyclerAdapter.OnPostsListener 
         //   setupToolbar(binding.contentToolbarId, rString(R.string.lbl_transactions))
         binding.contentToolbarId.imgClear.setOnClickListener {
             animate()
-            homeViewModel.deleteAllTransaction()
+            homeViewModel.deleteAllPosts()
             transactionRecyclerAdapter?.removeTransactions()
         }
     }
