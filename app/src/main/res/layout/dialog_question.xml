@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imgClose"
+        android:layout_width="@dimen/dimen_dp_30"
+        android:layout_height="@dimen/dimen_dp_30"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_close_circle_red" />
+
+    <ImageView
+        android:id="@+id/imgFavorite"
+        android:layout_width="@dimen/dimen_dp_30"
+        android:layout_height="@dimen/dimen_dp_30"
+        android:layout_margin="16dp"
+        android:background="@drawable/ic_favorite"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_dp_14"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgClose"
+        app:srcCompat="@drawable/ic_zemoga" />
+
+    <TextView
+        android:id="@+id/lblTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_dp_60"
+        android:layout_marginTop="@dimen/dimen_dp_30"
+        android:layout_marginEnd="@dimen/dimen_dp_60"
+        android:textAlignment="center"
+        android:textSize="@dimen/dimen_sp_18"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgIcon" />
+
+    <TextView
+        android:id="@+id/lblDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_dp_60"
+        android:layout_marginTop="@dimen/dimen_dp_30"
+        android:layout_marginEnd="@dimen/dimen_dp_60"
+        android:textAlignment="center"
+        android:textSize="@dimen/dimen_sp_18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+
+    <Button
+        android:id="@+id/butCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_dp_60"
+        android:layout_marginTop="@dimen/dimen_dp_30"
+        android:layout_marginEnd="@dimen/dimen_dp_60"
+        android:text="@string/lbl_close"
+        android:textAlignment="center"
+        android:textSize="@dimen/dimen_sp_18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
