@@ -55,7 +55,7 @@ class PostsInteractor {
             }
     }
 
-    private fun getFavoritePost(id: Int): Boolean {
+    fun getFavoritePost(id: Int): Boolean {
         return postRepository.getFavoritePost(id) != null
     }
 
@@ -112,7 +112,7 @@ class PostsInteractor {
         return models
     }
 
-    private fun convertPostEntityToModel(json: String?): PostDTO {
+    fun convertPostEntityToModel(json: String?): PostDTO {
         val gson = Gson()
         val transaction = object : TypeToken<PostDTO>() {}.type
         return gson.fromJson(json, transaction)
