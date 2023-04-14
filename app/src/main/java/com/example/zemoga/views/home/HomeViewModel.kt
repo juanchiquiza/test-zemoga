@@ -48,8 +48,16 @@ class HomeViewModel : ViewModel() {
         })
     }
 
+    fun saveFavoritePost(post: PostModel?) {
+        postsInteractor.saveFavoritePost(post)?.subscribe({
+            singleLiveEvent.value = ViewEvent.ResponseDeleteTransaction(it)
+        }, {
+            singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)
+        })
+    }
+
     fun deleteTransaction(id: Int) {
-        postsInteractor.deletePost(id)?.subscribe({
+        postsInteractor.deleteFavoritePost(id)?.subscribe({
             singleLiveEvent.value = ViewEvent.ResponseDeleteTransaction(it)
         }, {
             singleLiveEvent.value = ViewEvent.ResponseError(ApiError(it).apiErrorModel)

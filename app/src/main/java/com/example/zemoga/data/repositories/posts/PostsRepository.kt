@@ -34,15 +34,19 @@ class PostsRepository : IPostsRepository {
         return databaseHelper.saveTransaction(entity)
     }
 
-    override fun getTransactionDB(): Observable<List<PostEntity>>? {
+    override fun getFavoritePost(id: Int): PostEntity? {
+        return databaseHelper.getFavoritePost(id)
+    }
+
+    override fun getPostsDB(): Observable<List<PostEntity>>? {
         return databaseHelper.getTransactions()
     }
 
-    override fun deleteTransaction(id: Int): Observable<Boolean>? {
+    override fun deleteFavoritePost(id: Int): Observable<Boolean>? {
         return databaseHelper.deleteTransaction(id)
     }
 
-    override fun deleteAllTransaction(): Observable<Boolean>? {
+    override fun deleteAllPosts(): Observable<Boolean>? {
         return databaseHelper.deleteAllTransactions()
     }
 }

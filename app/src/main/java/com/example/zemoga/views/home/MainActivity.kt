@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -142,10 +143,30 @@ class MainActivity : BaseActivity(), TransactionRecyclerAdapter.OnPostsListener 
         val alertDialog = builder.show()
         dialogView.lblTitle.text = post?.title
         dialogView.lblDescription.text = post?.body
+
+        if (post != null) {
+            if (post.favorite)
+                dialogView.imgFavorite.background =
+                    ContextCompat.getDrawable(this, R.drawable.ic_favorite_selected)
+            else
+                dialogView.imgFavorite.background =
+                    ContextCompat.getDrawable(this, R.drawable.ic_favorite)
+        }
+
         dialogView.butCancel.setOnClickListener {
             alertDialog.dismiss()
         }
         dialogView.imgClose.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        dialogView.imgFavorite.setOnClickListener {
+            if (post != null) {
+                if (post.favorite)
+                    post.id?.let { id -> homeViewModel.deleteTransaction(id) }
+                else
+                    homeViewModel.saveFavoritePost(post)
+
+            }
             alertDialog.dismiss()
         }
     }

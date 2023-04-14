@@ -8,7 +8,8 @@ interface IPostsRepository {
     fun getPosts(): Observable<List<PostDTO>>?
     fun getPost(id: Int): Observable<PostDTO>?
     fun savePost(entity: PostEntity): Observable<Boolean>?
-    fun getTransactionDB(): Observable<List<PostEntity>>?
-    fun deleteTransaction(id: Int): Observable<Boolean>?
-    fun deleteAllTransaction(): Observable<Boolean>?
+    fun getFavoritePost(id: Int): PostEntity?
+    fun getPostsDB(): Observable<List<PostEntity>>?
+    fun deleteFavoritePost(id: Int): Observable<Boolean>?
+    fun deleteAllPosts(): Observable<Boolean>?
 }

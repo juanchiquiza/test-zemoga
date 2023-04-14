@@ -15,6 +15,16 @@
         app:srcCompat="@drawable/ic_close_circle_red" />
 
     <ImageView
+        android:id="@+id/imgFavorite"
+        android:layout_width="@dimen/dimen_dp_30"
+        android:layout_height="@dimen/dimen_dp_30"
+        android:layout_margin="16dp"
+        android:background="@drawable/ic_favorite"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/imgIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

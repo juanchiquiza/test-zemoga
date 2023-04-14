@@ -34,7 +34,7 @@ class DBHelper {
     fun deleteTransaction(id: Int): Observable<Boolean>? {
         val realmInstance: Realm = Realm.getDefaultInstance()
         return try {
-            realmInstance.executeTransaction{
+            realmInstance.executeTransaction {
                 it.where(PostEntity::class.java).equalTo("id", id).findAll().deleteAllFromRealm()
             }
             Observable.just(true)
@@ -48,7 +48,7 @@ class DBHelper {
     fun deleteAllTransactions(): Observable<Boolean>? {
         val realmInstance: Realm = Realm.getDefaultInstance()
         return try {
-            realmInstance.executeTransaction{
+            realmInstance.executeTransaction {
                 it.where(PostEntity::class.java).findAll().deleteAllFromRealm()
             }
             Observable.just(true)
@@ -68,5 +68,16 @@ class DBHelper {
             return null
         }
         return userEntity
+    }
+
+    fun getFavoritePost(id: Int): PostEntity? {
+        val realm: Realm = Realm.getDefaultInstance()
+        val postEntity: PostEntity?
+        try {
+            postEntity = realm.where(PostEntity::class.java).equalTo("id", id).findFirst()
+        } catch (ex: RealmException) {
+            return null
+        }
+        return postEntity
     }
 }

@@ -29,7 +29,7 @@ class PostsInteractor {
     fun getPosts(): Observable<List<PostModel>>? {
         connectionManger = ConnectionManager()
         return if (!connectionManger.validateConnectionWifi(context)) {
-            postRepository.getTransactionDB()
+            postRepository.getPostsDB()
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.flatMap { dtoList ->
@@ -46,43 +46,59 @@ class PostsInteractor {
     }
 
     fun getPost(id: Int): Observable<PostModel>? {
+        val isFavorite = getFavoritePost(id)
         return postRepository.getPost(id)
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.flatMap { dto ->
-                Observable.just(convertTransactionDtoToModel(dto))
+                Observable.just(convertTransactionDtoToModel(dto, isFavorite))
             }
+    }
+
+    private fun getFavoritePost(id: Int): Boolean {
+        return postRepository.getFavoritePost(id) != null
     }
 
     fun convertTransactionListDtoToModels(dtoList: List<PostDTO>): List<PostModel> {
         val models = mutableListOf<PostModel>()
         dtoList.forEach { dto ->
             val model = convertTransactionDtoToModel(dto)
-            savePostEntity(convertTransactionDtoToEntity(dto))
+            //  savePostEntity(convertTransactionDtoToEntity(dto))
             models.add(model)
         }
         return models
     }
 
-    private fun convertTransactionDtoToEntity(postDto: PostDTO): PostEntity {
+    private fun convertTransactionDtoToEntity(post: PostModel?): PostEntity {
         val gson = Gson()
-        val jsonString = gson.toJson(postDto)
+        val jsonString = gson.toJson(post)
         return PostEntity().apply {
-            id = postDto.id
+            if (post != null) {
+                id = post.id
+            }
             transactionObj = jsonString
         }
     }
 
-    private fun savePostEntity(entity: PostEntity?): Observable<PostEntity> {
-        entity?.let { postRepository.savePost(it) }
-        return Observable.just(entity)
+    fun saveFavoritePost(post: PostModel?): Observable<Boolean>? {
+        val postEntity = convertTransactionDtoToEntity(post)
+        return postRepository.savePost(postEntity)
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.flatMap { dto ->
+                Observable.just(dto)
+            }
     }
 
-    private fun convertTransactionDtoToModel(dto: PostDTO?): PostModel {
+    private fun convertTransactionDtoToModel(
+        dto: PostDTO?,
+        isFavorite: Boolean = false,
+    ): PostModel {
         return PostModel().apply {
             id = dto?.id
             title = dto?.title
             body = dto?.body
+            favorite = isFavorite
         }
     }
 
@@ -102,8 +118,8 @@ class PostsInteractor {
         return gson.fromJson(json, transaction)
     }
 
-    fun deletePost(id: Int): Observable<Boolean>? {
-        return postRepository.deleteTransaction(id)
+    fun deleteFavoritePost(id: Int): Observable<Boolean>? {
+        return postRepository.deleteFavoritePost(id)
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.flatMap { it ->
@@ -112,7 +128,7 @@ class PostsInteractor {
     }
 
     fun deleteAllPosts(): Observable<Boolean>? {
-        return postRepository.deleteAllTransaction()
+        return postRepository.deleteAllPosts()
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.flatMap { it ->

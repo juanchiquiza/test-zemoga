@@ -6,4 +6,5 @@ class PostModel : Serializable {
     var id: Int? = 0
     var title: String? = null
     var body: String? = null
+    var favorite: Boolean = false
 }

@@ -5,6 +5,8 @@
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.14" />
         <entry key="app/src/main/res/drawable/button_bg.xml" value="0.2075" />
+        <entry key="app/src/main/res/drawable/ic_favorite.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_favorite_unselected.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.14" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.14" />
         <entry key="app/src/main/res/drawable/ic_leal.xml" value="0.2225" />
